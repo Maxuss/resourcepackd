@@ -1,0 +1,3 @@
+[submodule "PackSquash"]
+	path = PackSquash
+	url = https://github.com/ComunidadAylas/PackSquash
