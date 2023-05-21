@@ -1,0 +1,1 @@
+execute as @a run say Hello, World!

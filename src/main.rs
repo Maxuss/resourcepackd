@@ -22,6 +22,9 @@ enum Args {
 pub struct WatchCmd {
     /// Root directory to watch
     root_dir: PathBuf,
+    /// Specifies the output file
+    #[arg(long = "out", short, default_value = "pack.zip")]
+    out_file: PathBuf,
     // /// Whether to use PackSquash for compilation and validation, or simple zipping
     // #[arg(long, short)]
     // packsquash: bool,
@@ -32,15 +35,15 @@ pub struct CompileCmd {
     /// Root directory to build
     root_dir: PathBuf,
     /// Specifies the output file
-    #[arg(long = "to", short, default_value = "pack.zip")]
-    to_file: PathBuf,
+    #[arg(long = "out", short, default_value = "pack.zip")]
+    out_file: PathBuf,
     // /// Whether to use PackSquash for compilation and validation, or simple zipping
     // #[arg(long, short)]
     // packsquash: bool,
 }
 
 #[tracing::instrument]
-fn main() {
+fn main() -> anyhow::Result<()> {
     // Logging
     tracing_subscriber::registry()
         .with(tracing_subscriber::fmt::layer().compact().with_ansi(true))
@@ -51,12 +54,13 @@ fn main() {
 
     match args {
         Args::Watch(watch_cmd) => {
-            watching::watch(watch_cmd);
+            watching::watch(watch_cmd)?;
         }
         Args::Compile(compile_cmd) => {
-            if let Err(error) = comp::compile_pack(compile_cmd.root_dir, compile_cmd.to_file) {
+            if let Err(error) = comp::compile_pack(compile_cmd.root_dir, compile_cmd.out_file) {
                 tracing::error!("Failed to compile resource pack: {error}")
             }
         }
     }
+    Ok(())
 }
