@@ -1,7 +1,13 @@
 [package]
 name = "resourcepackd"
-version = "0.1.0"
+version = "0.8.0"
 edition = "2021"
+license = "Apache-2.0"
+authors = ["Maxuss <maxus.info.mail@proton.me>"]
+description = "An utility for Minecraft datapack development"
+repository = "https://github.com/Maxuss/resourcepackd"
+keywords = ["Minecraft", "CLI"]
+categories = ["command-line-utilities", "development-tools"]
 
 [[bin]]
 name = "rpd"
