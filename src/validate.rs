@@ -1,4 +1,4 @@
-use std::{fmt::Debug, path::Path, time::Instant};
+use std::{path::Path, time::Instant};
 
 use anyhow::bail;
 use json_comments::StripComments;
@@ -9,10 +9,7 @@ use tokio::{
 };
 
 #[tracing::instrument(skip(path_p, jsonc))]
-pub async fn validate_json<P: AsRef<Path> + Debug>(
-    path_p: P,
-    jsonc: bool,
-) -> anyhow::Result<String> {
+pub async fn validate_json<P: AsRef<Path>>(path_p: P, jsonc: bool) -> anyhow::Result<String> {
     let path = path_p.as_ref();
     let start_time = Instant::now();
 

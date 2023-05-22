@@ -13,7 +13,8 @@ use tracing_subscriber::{
     util::SubscriberInitExt,
 };
 
-/// A tool to watch and compile minecraft resourcepacks
+/// A tool to watch and compile minecraft resourcepacks.
+/// Does simple file validation, supports comments in JSON files.
 #[derive(Parser)]
 #[clap(author, version, about, long_about = None)]
 enum Args {
@@ -36,9 +37,6 @@ pub struct WatchCmd {
     /// Whether to validate JSON and strip JSONC comments
     #[arg(long, short, default_value_t = false)]
     validate: bool,
-    // /// Whether to use PackSquash for compilation and validation, or simple zipping
-    // #[arg(long, short)]
-    // packsquash: bool,
 }
 
 #[derive(Parser)]
@@ -52,9 +50,6 @@ pub struct CompileCmd {
     /// Whether to validate JSON and strip JSONC comments
     #[arg(long, short, default_value_t = false)]
     validate: bool,
-    // /// Whether to use PackSquash for compilation and validation, or simple zipping
-    // #[arg(long, short)]
-    // packsquash: bool,
 }
 
 #[derive(Debug, Clone)]

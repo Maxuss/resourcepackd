@@ -7,6 +7,7 @@ use std::{
     time::Instant,
 };
 
+use anyhow::bail;
 use async_walkdir::WalkDir;
 use futures_lite::StreamExt;
 use tokio::{
@@ -111,8 +112,7 @@ pub async fn compile_pack(root: PathBuf, out_p: PathBuf, validate: bool) -> anyh
                 }
             }
             Some(Err(e)) => {
-                tracing::error!("Error walking directory: {e:?}");
-                break;
+                bail!(e)
             }
             None => break,
         }
