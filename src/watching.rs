@@ -2,7 +2,7 @@ use notify::{event::CreateKind, Config, RecommendedWatcher, RecursiveMode, Watch
 
 use crate::{comp::compile_pack, WatchCmd};
 
-pub fn watch(cmd: WatchCmd) -> anyhow::Result<()> {
+pub async fn watch(cmd: WatchCmd) -> anyhow::Result<()> {
     tracing::info!("Watching directory {:?} for changes", cmd.root_dir);
 
     let (tx, rx) = std::sync::mpsc::channel();
@@ -22,7 +22,9 @@ pub fn watch(cmd: WatchCmd) -> anyhow::Result<()> {
                 | notify::EventKind::Create(CreateKind::File)
                 | notify::EventKind::Remove(_) => {
                     tracing::info!("Detected changes, recompiling...");
-                    if let Err(error) = compile_pack(cmd.root_dir.clone(), cmd.out_file.clone()) {
+                    if let Err(error) =
+                        compile_pack(cmd.root_dir.clone(), cmd.out_file.clone(), cmd.validate).await
+                    {
                         tracing::error!("Failed to compile resource pack: {error}")
                     }
                 }

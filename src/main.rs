@@ -1,4 +1,5 @@
 pub mod comp;
+pub mod validate;
 pub mod watching;
 
 use std::path::PathBuf;
@@ -32,6 +33,9 @@ pub struct WatchCmd {
     /// Specifies the output file
     #[arg(long = "out", short, default_value = "pack.zip")]
     out_file: PathBuf,
+    /// Whether to validate JSON and strip JSONC comments
+    #[arg(long, short, default_value_t = false)]
+    validate: bool,
     // /// Whether to use PackSquash for compilation and validation, or simple zipping
     // #[arg(long, short)]
     // packsquash: bool,
@@ -45,6 +49,9 @@ pub struct CompileCmd {
     /// Specifies the output file
     #[arg(long = "out", short, default_value = "pack.zip")]
     out_file: PathBuf,
+    /// Whether to validate JSON and strip JSONC comments
+    #[arg(long, short, default_value_t = false)]
+    validate: bool,
     // /// Whether to use PackSquash for compilation and validation, or simple zipping
     // #[arg(long, short)]
     // packsquash: bool,
@@ -60,11 +67,12 @@ impl FormatTime for TimeFmt {
 }
 
 #[tracing::instrument]
-fn main() -> anyhow::Result<()> {
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
     // Logging
     let filter = tracing_subscriber::filter::filter_fn(|meta| {
         let is_rpd = meta.module_path().unwrap_or_default().contains("rpd")
-            && *meta.level() <= tracing::Level::INFO;
+            && *meta.level() <= tracing::Level::TRACE;
         is_rpd || *meta.level() <= tracing::Level::WARN
     });
     let subscriber = SubscriberBuilder::default()
@@ -78,12 +86,18 @@ fn main() -> anyhow::Result<()> {
     let args = Args::parse();
     match args {
         Args::Watch(watch_cmd) => {
-            if let Err(error) = watching::watch(watch_cmd) {
+            if let Err(error) = watching::watch(watch_cmd).await {
                 tracing::error!("Failed to watch directory: {error}")
             }
         }
         Args::Compile(compile_cmd) => {
-            if let Err(error) = comp::compile_pack(compile_cmd.root_dir, compile_cmd.out_file) {
+            if let Err(error) = comp::compile_pack(
+                compile_cmd.root_dir,
+                compile_cmd.out_file,
+                compile_cmd.validate,
+            )
+            .await
+            {
                 tracing::error!("Failed to compile resource pack: {error}")
             }
         }
