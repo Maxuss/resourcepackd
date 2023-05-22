@@ -2,6 +2,6 @@
 	// Hello, world!
 	"pack": {
 		"pack_format": 10,
-		"description": "A test datapack for RPD"
+		"description": "A test datapack for RPD. This is description"
 	}
 }
