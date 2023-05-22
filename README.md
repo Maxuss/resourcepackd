@@ -1,18 +1,18 @@
 # ResourcepackD (rpd)
 
-An extremely simple CLI utility to watch and compile minecraft data and resource packs on the fly!
+An extremely simple CLI utility to watch minecraft data and resource packs for changes and compile them on fly!
 
-RPD supports optional validation of JSON files and stripping comments from JSONC files, however other contents are not checked and are untouched. If you wish to use your pack in production I recommend to further use [PackSquash](https://github.com/ComunidadAylas/PackSquash) on it.
+RPD supports [optional validation of JSON files](#enabling-validation) and stripping comments from JSONC files, however other contents are not checked and are untouched. If you wish to use your pack in production I recommend to further use [PackSquash](https://github.com/ComunidadAylas/PackSquash) on it.
 
 ## Usage
 
-Install using cargo or just [download release binaries](https://github.com/Maxuss/resourcepackd/releases/latest) on Github
+Install using cargo or just [download release binaries](https://github.com/Maxuss/resourcepackd/releases/latest) from Github
 
 ```sh
 cargo install resourcepackd
 ```
 
-You can then watch your directory
+You can then watch your directory for changes
 
 ```sh
 rpd watch <ROOT_DIR> -o <OUT_FILE>
@@ -25,6 +25,7 @@ rpd watch . -o build/resourcepack.zip
 ```
 
 RPD will launch and you will be able to start developing your resourcepack!
+Whenever a file is changed, pack will be recompiled to provided directory.
 
 You can also do one-time compilation with
 
