@@ -8,6 +8,7 @@ description = "An utility for Minecraft datapack development"
 repository = "https://github.com/Maxuss/resourcepackd"
 keywords = ["Minecraft", "CLI"]
 categories = ["command-line-utilities", "development-tools"]
+readme = "README.md"
 
 [[bin]]
 name = "rpd"
