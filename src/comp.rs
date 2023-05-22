@@ -35,8 +35,13 @@ const JSONC_REGEX: OnceCell<Regex> = OnceCell::new();
 pub async fn compile_pack(root: PathBuf, out_p: PathBuf, validate: bool) -> anyhow::Result<()> {
     if out_p.exists() {
         tokio::fs::remove_file(out_p.clone()).await?;
+    } else if !out_p
+        .parent()
+        .ok_or(anyhow::anyhow!("Invalid path"))?
+        .exists()
+    {
+        tokio::fs::create_dir_all(out_p.parent().unwrap()).await?;
     }
-
     let mut out = File::create(out_p.clone()).await?;
     let mut writer = BufWriter::new(&mut out);
     let mut zip_writer = ZipFileWriter::with_tokio(&mut writer);
