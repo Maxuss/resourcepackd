@@ -798,7 +798,7 @@ checksum = "a5996294f19bd3aae0453a862ad728f60e6600695733dd5df01da90c54363a3c"
 
 [[package]]
 name = "resourcepackd"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "async-walkdir",
