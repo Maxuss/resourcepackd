@@ -42,6 +42,7 @@ pub async fn compile_pack(root: PathBuf, out_p: PathBuf, validate: bool) -> anyh
     {
         tokio::fs::create_dir_all(out_p.parent().unwrap()).await?;
     }
+    
     let mut out = File::create(out_p.clone()).await?;
     let mut writer = BufWriter::new(&mut out);
     let mut zip_writer = ZipFileWriter::with_tokio(&mut writer);
