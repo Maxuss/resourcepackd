@@ -1,4 +1,4 @@
-use notify::{event::CreateKind, Config, RecommendedWatcher, RecursiveMode, Watcher};
+use notify::{Config, RecommendedWatcher, RecursiveMode, Watcher};
 
 use crate::{comp::compile_pack, WatchCmd};
 
@@ -19,8 +19,10 @@ pub async fn watch(cmd: WatchCmd) -> anyhow::Result<()> {
         match res {
             Ok(event) => match event.kind {
                 notify::EventKind::Access(_)
-                | notify::EventKind::Create(CreateKind::File)
-                | notify::EventKind::Remove(_) => {
+                | notify::EventKind::Create(_)
+                | notify::EventKind::Remove(_)
+                | notify::EventKind::Modify(_) // windows support
+                 => {
                     tracing::info!("Detected changes, recompiling...");
                     if let Err(error) =
                         compile_pack(cmd.root_dir.clone(), cmd.out_file.clone(), cmd.validate).await
